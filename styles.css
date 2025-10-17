@@ -96,14 +96,6 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Optional: dark mode tweak if you have one */
-@media (prefers-color-scheme: dark) {
-  .fancy-headline { color: #f3f4f6; }
-  .fancy-headline .accent::after {
-    background: linear-gradient(90deg, #5eead4, #93c5fd);
-  }
-}
-
 .hero-title {
     font-size: 5rem;
     font-weight: bold;
