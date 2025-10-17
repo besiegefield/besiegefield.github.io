@@ -70,20 +70,27 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-.fancy-headline .accent{
+.fancy-headline .accent {
   position: relative;
   display: inline-block;
-
+  z-index: 0;
   background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
   -webkit-background-clip: text;
+  -moz-background-clip: text;
   background-clip: text;
+  -webkit-text-fill-color: transparent;
   color: transparent;
-
-  letter-spacing: .06em;
-  font-weight: 800;
 }
 
-.fancy-headline .accent::after{
+.fancy-headline .accent::before {
+  content: attr(data-text); /* duplicate text for background fill */
+  position: absolute;
+  left: 0; top: 0;
+  color: #fff; /* or background color */
+  z-index: -1; /* acts as isolating layer */
+}
+
+.fancy-headline .accent::after {
   content: "";
   position: absolute;
   left: 0; right: 0;
@@ -91,8 +98,9 @@ body {
   height: 0.28em;
   background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
   border-radius: .3em;
-  z-index: -1;
+  z-index: -2;
 }
+
 
 @media (prefers-reduced-motion: no-preference) {
   .fancy-headline {
