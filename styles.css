@@ -71,32 +71,23 @@ body {
 }
 
 .fancy-headline .accent{
-  position: relative;
+  --grad: linear-gradient(90deg, var(--accent-1), var(--accent-2));
   display: inline-block;
-  z-index: 0;
 
-  /* your gradient text setup… */
-  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
-  -webkit-background-clip: text;
-  background-clip: text;
+  /* two backgrounds: [0]=text fill, [1]=underline */
+  background-image: var(--grad), var(--grad);
+  -webkit-background-clip: text, padding-box;
+  background-clip: text, padding-box;
   -webkit-text-fill-color: transparent;
   color: transparent;
 
-  letter-spacing: .06em;
-  font-weight: 800;
-
-  /* NEW: space for the underline so it doesn't overlap glyphs */
-  padding-bottom: 0.18em;   /* tune 0.14–0.24em as you like */
+  background-repeat: no-repeat, no-repeat;
+  background-position: 0 0, 0 100%;
+  background-size: 100% 100%, 100% 0.20em; /* underline thickness */
+  padding-bottom: 0.22em;  /* room for underline */
+  border-radius: 0.3em;    /* gives the underline rounded ends a bit */
 }
 
-.fancy-headline .accent::after{
-  content: "";
-  position: absolute;
-  left: 0; right: 0;
-  /* NEW: sit just below the baseline, not inside the glyphs */
-  bottom: -0.04em;          /* tune -0.02 to -0.08em */
-  height: 0.2
-}
 
 
 @media (prefers-reduced-motion: no-preference) {
