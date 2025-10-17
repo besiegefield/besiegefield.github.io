@@ -38,6 +38,7 @@ body {
   background-repeat: no-repeat;
   opacity: 0.5;            /* 0.0–1.0; “50% opacity” */
   z-index: 0;
+  width: 70%;
 }
 
 /* Foreground content sits above the dim layer */
