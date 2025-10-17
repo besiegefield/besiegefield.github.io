@@ -20,19 +20,23 @@ body {
 
 .hero {
   position: relative;
-  width: 100vw;            /* ensures it spans full viewport width */
-  min-height: 100vh;       /* full screen height (adjust if you want smaller) */
-  overflow: hidden;        /* hides overflow from the ::before layer */
+  width: 100%;          /* use 100%, not 100vw (avoids overflow) */
+  min-height: 900px;    /* fixed height like your original */
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
 }
 
+/* Background image layer (full cover, no clipping) */
 .hero::before {
   content: "";
   position: absolute;
-  inset: 0;              
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-image: url('figures/TopBackground.png');
   background-size: cover;
   background-position: center bottom;
@@ -41,11 +45,11 @@ body {
   z-index: 0;
 }
 
+/* Foreground and overlay stay above the background */
 .hero > .foreground {
   position: relative;
   z-index: 1;
 }
-
 
 .hero-overlay {
   position: relative;
