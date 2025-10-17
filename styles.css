@@ -59,38 +59,47 @@ body {
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
 }
 
-
 .fancy-headline {
   font-family: "Spectral", ui-serif, Georgia, "Times New Roman", serif;
   font-weight: 700;
   font-size: clamp(20px, 6vw, 56px);
   line-height: 1.05;
   letter-spacing: -0.01em;
-  font-variation-settings: "wght" 700, "opsz" 32; /* optical sizing */
-
+  font-variation-settings: "wght" 700, "opsz" 32;
   color: #111;
   display: inline-block;
 }
 
-.fancy-headline .accent{
+/* Fallback color if gradient text isn't supported */
+.fancy-headline .accent {
   --grad: linear-gradient(90deg, var(--accent-1), var(--accent-2));
   display: inline-block;
-
-  /* two backgrounds: [0]=text fill, [1]=underline */
-  background-image: var(--grad), var(--grad);
-  -webkit-background-clip: text, padding-box;
-  background-clip: text, padding-box;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-
-  background-repeat: no-repeat, no-repeat;
-  background-position: 0 0, 0 100%;
-  background-size: 100% 100%, 100% 0.20em; /* underline thickness */
-  padding-bottom: 0.22em;  /* room for underline */
-  border-radius: 0.3em;    /* gives the underline rounded ends a bit */
+  color: var(--accent-fallback, currentColor); /* fallback shows solid text */
 }
 
+/* Use gradient text when supported (no underline) */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .fancy-headline .accent {
+    background-image: var(--grad);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+}
 
+/* Optional: better contrast in dark mode */
+@media (prefers-color-scheme: dark) {
+  .fancy-headline { color: #eee; }
+  :root {
+    --accent-1: #ffb07c;        /* tune to taste */
+    --accent-2: #7bb7ff;
+    --accent-fallback: #ffb07c;
+  }
+}
+
+/* (Keep your rise animation if you like) */
 @keyframes rise {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
