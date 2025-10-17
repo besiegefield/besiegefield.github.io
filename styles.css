@@ -73,27 +73,29 @@ body {
 .fancy-headline .accent{
   position: relative;
   display: inline-block;
+  z-index: 0;
 
+  /* your gradient text setup… */
   background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
   -webkit-background-clip: text;
   background-clip: text;
+  -webkit-text-fill-color: transparent;
   color: transparent;
 
-  text-transform: uppercase;
   letter-spacing: .06em;
   font-weight: 800;
-  isolation: isolate;
+
+  /* NEW: space for the underline so it doesn't overlap glyphs */
+  padding-bottom: 0.18em;   /* tune 0.14–0.24em as you like */
 }
 
 .fancy-headline .accent::after{
   content: "";
   position: absolute;
   left: 0; right: 0;
-  bottom: 0.14em;
-  height: 0.28em;
-  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
-  border-radius: .3em;
-  z-index: -1;
+  /* NEW: sit just below the baseline, not inside the glyphs */
+  bottom: -0.04em;          /* tune -0.02 to -0.08em */
+  height: 0.2
 }
 
 
