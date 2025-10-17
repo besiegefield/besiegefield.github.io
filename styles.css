@@ -89,22 +89,6 @@ body {
   }
 }
 
-/* Optional: better contrast in dark mode */
-@media (prefers-color-scheme: dark) {
-  .fancy-headline { color: #eee; }
-  :root {
-    --accent-1: #ffb07c;        /* tune to taste */
-    --accent-2: #7bb7ff;
-    --accent-fallback: #ffb07c;
-  }
-}
-
-/* (Keep your rise animation if you like) */
-@keyframes rise {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
 .hero-title {
     font-size: 5rem;
     font-weight: bold;
