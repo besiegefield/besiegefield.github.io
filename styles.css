@@ -608,11 +608,13 @@ img[data-src] {
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
-    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
     box-sizing: border-box;
 }
 .typewriter-left code {
-    white-space: pre !important;
+    white-space: pre-wrap !important;
+    word-wrap: break-word;
     display: block;
 }
 .typewriter-right {
