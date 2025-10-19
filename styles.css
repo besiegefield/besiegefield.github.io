@@ -566,30 +566,30 @@ img[data-src] {
     --cursor-color: #7ec699;
 }
 #typewriter-container {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    align-items: flex-start;
-    flex-wrap: wrap;
     margin: 40px 0;
     overflow-x: auto;
     overflow-y: visible;
+    width: 100%;
+    text-align: center;
 }
 .typewriter-row {
-    display: flex;
+    display: inline-flex;
     gap: 20px;
     justify-content: center;
     align-items: flex-start;
-    width: 100%;
+    min-width: max-content;
+    text-align: left;
+    vertical-align: top;
 }
 .typewriter-stage {
     background: #282c34;
     border-radius: 8px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
-    display: flex;
+    display: inline-flex;
     overflow: hidden;
     position: relative;
     margin-bottom: 60px;
+    flex-shrink: 0;
 }
 .typewriter-left {
     height: 100%;
@@ -599,6 +599,7 @@ img[data-src] {
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
+    flex-shrink: 0;
 }
 .typewriter-left pre {
     margin: 0;
@@ -621,6 +622,7 @@ img[data-src] {
     align-items: center;
     justify-content: center;
     min-width: 300px;
+    flex-shrink: 0;
 }
 .typewriter-right img {
     max-width: 90%;

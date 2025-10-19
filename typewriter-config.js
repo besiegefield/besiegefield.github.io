@@ -2,7 +2,7 @@
 const typewriterStages = [
     {
         row: 1,
-        rowWidth: 1200,  // 手动设置该 row 的总宽度（代码区+图片区）
+        rowWidth: 950,  // 手动设置该 row 的总宽度（代码区+图片区）
         code: `Let's build a catapult!
 <starting_block        parent=-1                    attach_to=-1>
 <small_woolden_block_1 parent=starting_block        attach_to=face_1>
@@ -33,12 +33,12 @@ const typewriterStages = [
             14: 'figures/agentic_building/build/12.png'
         },
         defaultPic: 'figures/agentic_building/build/0.png',
-        imageWidth: 500,
+        imageWidth: 400,
         stageHeight: 400
     },
     {
         row: 2,
-        rowWidth: 1200,  // 手动设置该 row 的总宽度
+        rowWidth: 950,  // 手动设置该 row 的总宽度
         code: `Catapult refine!
 delete(target=small_woolden_block_3)
 delete(target=small_woolden_block_4)
@@ -68,7 +68,7 @@ add(target=log_4, to=starting_block, face=face_3)
             13: 'figures/agentic_building/modify/24.png'
         },
         defaultPic: 'figures/agentic_building/build/12.png',
-        imageWidth: 500,
+        imageWidth: 400,
         stageHeight: 400
     }
 ];
