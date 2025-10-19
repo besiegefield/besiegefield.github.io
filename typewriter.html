@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Agentic Building – Code Typewriter</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<style>
+:root{
+  --speed:60ms;          /* 打字速度 */
+  --cursor:#7ec699;
+  --font:14px/1.6 "Fira Code","Consolas",monospace;
+}
+/* 容器：支持多行多列布局 */
+#container{background:#1e1e1e;padding:40px;min-height:100vh}
+.stage-row{display:flex;gap:20px;justify-content:center;align-items:flex-start;margin-bottom:20px}
+/* 单个舞台 */
+.stage{background:#282c34;border-radius:8px;box-shadow:0 8px 32px rgba(0,0,0,.6);display:flex;overflow:hidden;position:relative;margin-bottom:60px}
+/* 左侧代码区 */
+.left{height:100%;display:flex;flex-direction:column;padding:20px;box-sizing:border-box;position:relative;overflow:hidden}
+pre{margin:0;font:var(--font);color:#abb2bf;flex:1;overflow-y:auto;overflow-x:hidden;white-space:pre;box-sizing:border-box}
+code{white-space:pre!important;display:block}
+/* JSON 语法高亮颜色 */
+.json-string{color:#98c379;font-weight:500}
+.json-number{color:#d19a66;font-weight:500}
+.json-bracket{color:#61afef;font-weight:bold}
+.json-colon{color:#56b6c2}
+.json-comma{color:#abb2bf}
+.json-quote{color:#c678dd}
+.key-type{color:#e06c75;font-weight:600}
+.key-id{color:#61afef;font-weight:600}
+.key-parent{color:#c678dd;font-weight:600}
+.key-face_id{color:#e5c07b;font-weight:600}
+.key-order_id{color:#56b6c2;font-weight:600}
+.key-bp_id{color:#98c379;font-weight:600}
+.key-default{color:#d19a66;font-weight:600}
+/* XML 语法高亮 - 保持字符等宽，不使用 font-weight */
+.xml-tag-bracket{color:#808080}
+.xml-tag-name{color:#e06c75}
+.xml-attr-name{color:#d19a66}
+.xml-attr-value{color:#98c379}
+.xml-number{color:#d19a66}
+.cursor{display:inline-block;width:10px;height:1.1em;background:var(--cursor);vertical-align:text-bottom;animation:blink 1s steps(2,start) infinite}
+@keyframes blink{to{background:transparent}}
+/* 右侧图片区 */
+.right{height:100%;background:#000;display:flex;align-items:center;justify-content:center;min-width:300px}
+.right img{max-width:90%;max-height:90%;object-fit:contain;border-radius:4px}
+/* 控制栏 */
+.ctrl{position:absolute;bottom:-48px;left:0;right:0;display:flex;justify-content:center;gap:12px}
+.ctrl button{background:#3e4451;color:#fff;border:none;padding:6px 18px;border-radius:4px;cursor:pointer;font-size:14px}
+.ctrl button:hover{background:#5c6370}
+body{background:#1e1e1e;margin:0;padding:0}
+/* 隐藏的测量元素 */
+#measure{position:absolute;visibility:hidden;white-space:pre;font:var(--font);pointer-events:none;top:-9999px}
+</style>
+</head>
+<body>
+
+<div id="container"></div>
+<div id="measure"></div>
+
+<script>
+/****************  配置区（只改这里）  ****************/
+// 支持多个代码-图片对，使用 row 指定在第几行显示
+const stages = [
+  {
+    row: 1,  // 第一行
+    code: `Let's build a catapult!
+<starting_block        parent=-1                    attach_to=-1>
+<small_woolden_block_1 parent=starting_block        attach_to=face_1>
+<small_woolden_block_2 parent=starting_block        attach_to=face_2>
+<small_woolden_block_3 parent=small_woolden_block_1 attach_to=face_1>
+<small_woolden_block_4 parent=small_woolden_block_2 attach_to=face_3>
+<woolden_block_1       parent=starting_block        attach_to=face_3>
+<woolden_block_2       parent=woolden_block_1       attach_to=face_3>
+<small_woolden_block_5 parent=starting_block        attach_to=face_0>
+<woolden_block_3       parent=small_woolden_block_5 attach_to=face_5>
+<spinning_block_1      parent=woolden_block_3       attach_to=face_2>
+<log_1                 parent=spinning_block_1      attach_to=face_3>
+<holder_1              parent=log_1                 attach_to=face_0>
+<boulder_1             parent=holder_1              attach_to=face_0>
+`,
+    lineMap: {
+      3: 'figures/agentic_building/build/1.png',
+      4: 'figures/agentic_building/build/2.png',
+      5: 'figures/agentic_building/build/3.png',
+      6: 'figures/agentic_building/build/4.png',
+      7: 'figures/agentic_building/build/5.png',
+      8: 'figures/agentic_building/build/6.png',
+      9: 'figures/agentic_building/build/7.png',
+      10: 'figures/agentic_building/build/8.png',
+      11: 'figures/agentic_building/build/9.png',
+      12: 'figures/agentic_building/build/10.png',
+      13: 'figures/agentic_building/build/11.png',
+      14: 'figures/agentic_building/build/12.png'
+    },
+    defaultPic: 'figures/agentic_building/build/0.png',
+    imageWidth: 450,  // 图片区宽度
+    stageHeight: 400  // 舞台高度
+  }
+];
+
+const charInterval = 10;
+const cacheVersion = '20251019';
+/*********************************************************/
+
+const container = document.getElementById('container');
+const measureEl = document.getElementById('measure');
+
+// 计算文本最大宽度（像素）
+function measureCodeWidth(code){
+  measureEl.textContent = '';
+  const lines = code.split('\n');
+  let maxWidth = 0;
+  
+  lines.forEach(line => {
+    measureEl.textContent = line;
+    const width = measureEl.offsetWidth;
+    if(width > maxWidth) maxWidth = width;
+  });
+  
+  return maxWidth + 40; // 加上 padding
+}
+
+// XML 语法高亮
+function highlightChar(ch, prevChars){
+  const fullText = prevChars.join('');
+  const currentLine = fullText.split('\n').pop();
+  
+  const lastOpenBracket = currentLine.lastIndexOf('<');
+  const lastCloseBracket = currentLine.lastIndexOf('>');
+  const inTag = lastOpenBracket > lastCloseBracket && lastOpenBracket !== -1;
+  
+  if(ch === '<'){
+    return `<span class="xml-tag-bracket">&lt;</span>`;
+  }
+  if(ch === '>'){
+    return `<span class="xml-tag-bracket">&gt;</span>`;
+  }
+  
+  if(!inTag){
+    return ch;
+  }
+  
+  const inTagContent = currentLine.substring(lastOpenBracket + 1);
+  
+  if(ch === '=' || ch === ' '){
+    return ch;
+  }
+  
+  const lastSpaceInTag = inTagContent.lastIndexOf(' ');
+  const lastEqualInTag = inTagContent.lastIndexOf('=');
+  
+  if(lastSpaceInTag === -1){
+    if(/[a-zA-Z0-9_]/.test(ch)){
+      return `<span class="xml-tag-name">${ch}</span>`;
+    }
+  }
+  else if(lastEqualInTag > lastSpaceInTag){
+    const afterEqual = inTagContent.substring(lastEqualInTag + 1);
+    if(!/\s/.test(afterEqual)){
+      if(/[\d\-]/.test(ch)){
+        return `<span class="xml-number">${ch}</span>`;
+      }
+      if(/[a-zA-Z0-9_]/.test(ch)){
+        return `<span class="xml-attr-value">${ch}</span>`;
+      }
+    }
+  }
+  else if(lastSpaceInTag > lastEqualInTag){
+    const afterSpace = inTagContent.substring(lastSpaceInTag + 1);
+    if(!/=/.test(afterSpace)){
+      if(/[a-zA-Z_]/.test(ch)){
+        return `<span class="xml-attr-name">${ch}</span>`;
+      }
+    }
+  }
+  
+  return ch;
+}
+
+// 创建单个舞台
+function createStage(config, stageIndex){
+  const { code, lineMap, defaultPic, imageWidth, stageHeight } = config;
+  
+  // 计算代码区宽度
+  const codeWidth = measureCodeWidth(code);
+  const totalWidth = codeWidth + imageWidth;
+  
+  // 创建舞台元素
+  const stage = document.createElement('div');
+  stage.className = 'stage';
+  stage.style.width = totalWidth + 'px';
+  stage.style.height = stageHeight + 'px';
+  
+  const left = document.createElement('div');
+  left.className = 'left';
+  left.style.width = codeWidth + 'px';
+  
+  const pre = document.createElement('pre');
+  const codeBlock = document.createElement('code');
+  pre.appendChild(codeBlock);
+  left.appendChild(pre);
+  
+  const right = document.createElement('div');
+  right.className = 'right';
+  right.style.width = imageWidth + 'px';
+  
+  const img = document.createElement('img');
+  img.src = defaultPic + '?v=' + cacheVersion;
+  right.appendChild(img);
+  
+  const ctrl = document.createElement('div');
+  ctrl.className = 'ctrl';
+  ctrl.innerHTML = `
+    <button class="play-btn">▶ Play</button>
+    <button class="pause-btn">⏸ Pause</button>
+    <button class="replay-btn">🔄 Replay</button>
+  `;
+  
+  stage.appendChild(left);
+  stage.appendChild(right);
+  stage.appendChild(ctrl);
+  
+  // 预加载图片
+  const allImages = [defaultPic, ...Object.values(lineMap)];
+  allImages.forEach(src => {
+    const preloadImg = new Image();
+    preloadImg.src = src + '?v=' + cacheVersion;
+  });
+  
+  // 打字机状态
+  let index = 0;
+  let timer = null;
+  let paused = false;
+  let currentLine = 1;
+  
+  function setImage(url){
+    img.src = (url || defaultPic) + '?v=' + cacheVersion;
+  }
+  
+  function typeChar(){
+    if(paused) return;
+    if(index >= code.length){
+      clearInterval(timer);
+      codeBlock.insertAdjacentHTML('beforeend','<span class="cursor"></span>');
+      setTimeout(() => {
+        replay();
+      }, 3000);
+      return;
+    }
+    const ch = code[index++];
+    const prevChars = code.slice(0, index-1).split('');
+    
+    let displayCh = ch;
+    if(ch === '&') displayCh = '&amp;';
+    else if(ch === '\n') displayCh = '\n';
+    else displayCh = highlightChar(ch, prevChars);
+    
+    if(ch === '\n'){
+      codeBlock.insertAdjacentHTML('beforeend', '\n');
+      currentLine++;
+      if(lineMap[currentLine]) setImage(lineMap[currentLine]);
+    }else{
+      codeBlock.insertAdjacentHTML('beforeend', displayCh);
+    }
+    
+    const oldCur = codeBlock.querySelector('.cursor');
+    if(oldCur) oldCur.remove();
+    codeBlock.insertAdjacentHTML('beforeend','<span class="cursor"></span>');
+    pre.scrollTop = pre.scrollHeight;
+  }
+  
+  function start(){
+    paused=false;
+    if(timer)clearInterval(timer);
+    timer=setInterval(typeChar,charInterval);
+  }
+  
+  function pause(){
+    paused=true;
+  }
+  
+  function replay(){
+    codeBlock.innerHTML='';
+    index=0;
+    currentLine=1;
+    setImage(defaultPic);
+    start();
+  }
+  
+  ctrl.querySelector('.play-btn').onclick = start;
+  ctrl.querySelector('.pause-btn').onclick = pause;
+  ctrl.querySelector('.replay-btn').onclick = replay;
+  
+  start();
+  
+  return stage;
+}
+
+// 按行分组舞台
+const rowGroups = {};
+stages.forEach(config => {
+  const row = config.row || 1;
+  if(!rowGroups[row]) rowGroups[row] = [];
+  rowGroups[row].push(config);
+});
+
+// 按行号排序，创建行容器并添加舞台
+const sortedRows = Object.keys(rowGroups).sort((a, b) => a - b);
+sortedRows.forEach(rowNum => {
+  const rowDiv = document.createElement('div');
+  rowDiv.className = 'stage-row';
+  
+  // 计算该行最大高度
+  const rowConfigs = rowGroups[rowNum];
+  const maxRowHeight = Math.max(...rowConfigs.map(c => c.stageHeight));
+  
+  // 为该行的每个舞台设置统一高度
+  rowConfigs.forEach((config, index) => {
+    const uniformConfig = { ...config, stageHeight: maxRowHeight };
+    const stage = createStage(uniformConfig, index);
+    rowDiv.appendChild(stage);
+  });
+  
+  container.appendChild(rowDiv);
+});
+</script>
+</body>
+</html>

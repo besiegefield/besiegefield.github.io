@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <script src="progressive-loader.js" defer></script>
+    <script src="typewriter-config.js"></script>
+    <script src="typewriter.js" defer></script>
 </head>
 <body>
     <section class="hero">
@@ -68,6 +70,13 @@
                         allowfullscreen>
                     </iframe>
                 </div>
+            </div>
+        </section>
+
+        <section class="content-block">
+            <h2 class="block-title">Agentic Machine Construction</h2>
+            <div class="block-content">
+                <div id="typewriter-container"></div>
             </div>
         </section>
 
@@ -144,5 +153,12 @@
     <footer class="footer">
         <p>BesiegeField © 2025</p>
     </footer>
+
+    <script>
+        // 初始化 Typewriter
+        document.addEventListener('DOMContentLoaded', function() {
+            initTypewriter('typewriter-container', typewriterStages);
+        });
+    </script>
 </body>
 </html>
