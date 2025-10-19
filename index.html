@@ -12,10 +12,20 @@
 </head>
 <body>
     <section class="hero">
+        <!-- 视频背景 -->
+        <div class="hero-video-container">
+            <video id="hero-video-1" class="hero-video active" autoplay muted playsinline>
+                <source src="FancyDemo/2025-10-19 22-33-26.mp4" type="video/mp4">
+            </video>
+            <video id="hero-video-2" class="hero-video" muted playsinline>
+                <source src="FancyDemo/2025-10-19 22-33-52.mp4" type="video/mp4">
+            </video>
+        </div>
+        
+        <!-- Logo 和标题居中 -->
         <div class="hero-overlay">
-            <!-- <h1 class="hero-title">BESIEGEFIELD</h1> -->
-            <div class="foreground">
-                <img src="figures/logo.png" style="width: 50%;opacity: 1.0;z-index: 9999;" alt="Screenshot 1" class="no-progressive">
+            <div class="hero-logo">
+                <img src="figures/logo.png" alt="BesiegeField Logo">
             </div>
             <p class="hero-subtitle">Playground for Compositional Machine Design</p>
         </div>
@@ -158,6 +168,31 @@
         // 初始化 Typewriter
         document.addEventListener('DOMContentLoaded', function() {
             initTypewriter('typewriter-container', typewriterStages);
+        });
+
+        // Hero 视频循环播放控制
+        document.addEventListener('DOMContentLoaded', function() {
+            const video1 = document.getElementById('hero-video-1');
+            const video2 = document.getElementById('hero-video-2');
+
+            // 视频1播放结束时切换到视频2
+            video1.addEventListener('ended', function() {
+                video1.classList.remove('active');
+                video2.classList.add('active');
+                video2.currentTime = 0;
+                video2.play();
+            });
+
+            // 视频2播放结束时切换回视频1
+            video2.addEventListener('ended', function() {
+                video2.classList.remove('active');
+                video1.classList.add('active');
+                video1.currentTime = 0;
+                video1.play();
+            });
+
+            // 确保视频1开始播放
+            video1.play().catch(err => console.log('视频自动播放被阻止:', err));
         });
     </script>
 </body>

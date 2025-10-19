@@ -40,19 +40,18 @@ const typewriterStages = [
         row: 2,
         rowWidth: 1200,  // 手动设置该 row 的总宽度
         code: `Catapult refine!
-<Delete small_woolden_block_3>
-<Delete small_woolden_block_4>
-<Delete woolden_block_2>
-<Delete small_woolden_block_1>
-<Delete small_woolden_block_2>
-<Delete woolden_block_1>
-<Move log_1 to spinning_block_1 face_2>
-<Move holder_1 to log_1 face_8>
-<Add ballast_1 to spinning_block_1 face_1>
-<Add log_2 to starting_block face_1>
-<Add log_3 to starting_block face_2>
-<Add log_4 to starting_block face_3>
-
+delete(target=small_woolden_block_3)
+delete(target=small_woolden_block_4)
+delete(target=woolden_block_2)
+delete(target=small_woolden_block_1)
+delete(target=small_woolden_block_2)
+delete(target=woolden_block_1)
+move(target=log_1, to=spinning_block_1, face=face_2)
+move(target=holder_1, to=log_1, face=face_8)
+add(target=ballast_1, to=spinning_block_1, face=face_1)
+add(target=log_2, to=starting_block, face=face_1)
+add(target=log_3, to=starting_block, face=face_2)
+add(target=log_4, to=starting_block, face=face_3)
 `,
         lineMap: {
             2: 'figures/agentic_building/modify/13.png',

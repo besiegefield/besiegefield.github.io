@@ -23,10 +23,7 @@ body {
   position: relative;
   width: 100%;
   height: 900px;
-
-  /* optional: the page’s background color will show through the image’s transparency */
   background-color: white;
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -42,21 +39,61 @@ body {
   background-size: cover;
   background-position: center bottom;
   background-repeat: no-repeat;
-  opacity: 0.5;            /* 0.0–1.0; “50% opacity” */
+  opacity: 0.5;
   z-index: 0;
 }
 
-/* Foreground content sits above the dim layer */
-.hero > .foreground {
-  position: relative;
-  z-index: 1;
+/* Logo 居中，偏下 */
+.hero-logo {
+  width: 40%;
+  max-width: 500px;
+  margin: 0 auto 10px auto;  /* 减少底部间距从 30px 到 10px */
+  z-index: 10;
 }
+
+.hero-logo img {
+  width: 100%;
+  height: auto;
+  opacity: 1.0;
+}
+
+/* 视频容器 */
+.hero-video-container {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 视频样式 */
+.hero-video {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  pointer-events: none;
+}
+
+.hero-video.active {
+  opacity: 1;
+}
+
 .hero-overlay {
-    text-align: center;
-    color: white;
-    z-index: 2;
-    padding: 20px;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+  position: relative;
+  text-align: center;
+  color: white;
+  z-index: 2;
+  padding: 20px;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 35% !important;  /* 增加到 35% 并使用 !important 确保生效 */
 }
 
 .fancy-headline {
@@ -321,6 +358,12 @@ body {
         height: 500px;
     }
     
+    .hero-logo {
+        width: 50%;
+        max-width: 300px;
+        margin-bottom: 10px;
+    }
+    
     .hero-title {
         font-size: 3rem;
         letter-spacing: 4px;
@@ -361,6 +404,12 @@ body {
 }
 
 @media (max-width: 480px) {
+    .hero-logo {
+        width: 80%;
+        max-width: 250px;
+        margin-bottom: 5px;
+    }
+    
     .hero-title {
         font-size: 2rem;
         letter-spacing: 2px;
@@ -600,10 +649,11 @@ img[data-src] {
 }
 /* XML 语法高亮 */
 .xml-tag-bracket { color: #808080; }
-.xml-tag-name { color: #e06c75; }
-.xml-attr-name { color: #d19a66; }
-.xml-attr-value { color: #98c379; }
-.xml-number { color: #d19a66; }
+.xml-tag-name { color: #e06c75; }  /* 红色 - XML标签名 */
+.xml-function-name { color: #ff6b6b; }  /* 更亮的红色 - 函数名 delete/move/add */
+.xml-attr-name { color: #ffa94d; }  /* 更亮的橙色 - 参数名 */
+.xml-attr-value { color: #51cf66; }  /* 更亮的绿色 - 参数值 */
+.xml-number { color: #ffa94d; }  /* 橙色 - 数字 */
 .typewriter-cursor {
     display: inline-block;
     width: 10px;

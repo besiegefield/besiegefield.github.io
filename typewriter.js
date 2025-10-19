@@ -20,35 +20,104 @@
     function highlightChar(ch, prevChars) {
         const fullText = prevChars.join('');
         const currentLine = fullText.split('\n').pop();
-        const lastOpenBracket = currentLine.lastIndexOf('<');
-        const lastCloseBracket = currentLine.lastIndexOf('>');
-        const inTag = lastOpenBracket > lastCloseBracket && lastOpenBracket !== -1;
-
-        if (ch === '<') return '<span class="xml-tag-bracket">&lt;</span>';
-        if (ch === '>') return '<span class="xml-tag-bracket">&gt;</span>';
-        if (!inTag) return ch;
-
-        const inTagContent = currentLine.substring(lastOpenBracket + 1);
-        if (ch === '=' || ch === ' ') return ch;
-
-        const lastSpaceInTag = inTagContent.lastIndexOf(' ');
-        const lastEqualInTag = inTagContent.lastIndexOf('=');
-
-        if (lastSpaceInTag === -1) {
-            if (/[a-zA-Z0-9_]/.test(ch)) return '<span class="xml-tag-name">' + ch + '</span>';
-        } else if (lastEqualInTag > lastSpaceInTag) {
-            const afterEqual = inTagContent.substring(lastEqualInTag + 1);
-            if (!/\s/.test(afterEqual)) {
-                if (/[\d\-]/.test(ch)) return '<span class="xml-number">' + ch + '</span>';
-                if (/[a-zA-Z0-9_]/.test(ch)) return '<span class="xml-attr-value">' + ch + '</span>';
-            }
-        } else if (lastSpaceInTag > lastEqualInTag) {
-            const afterSpace = inTagContent.substring(lastSpaceInTag + 1);
-            if (!/=/.test(afterSpace)) {
-                if (/[a-zA-Z_]/.test(ch)) return '<span class="xml-attr-name">' + ch + '</span>';
-            }
+        
+        // 提取当前单词（从行首到当前位置，包含即将添加的字符）
+        const currentWord = (currentLine.trim() + ch).toLowerCase();
+        
+        // 检查是否在 delete/move/add 单词中
+        const keywords = ['delete', 'move', 'add'];
+        const isInKeyword = keywords.some(kw => kw.startsWith(currentWord) && /^[a-z]+$/.test(currentWord));
+        
+        if (isInKeyword && /[a-z]/.test(ch)) {
+            return '<span class="xml-function-name">' + ch + '</span>';
         }
-        return ch;
+        
+        // 检查是否是函数调用格式
+        const trimmedLine = currentLine.trim();
+        const hasFunctionCall = /^(delete|move|add)\(/.test(trimmedLine) || /\([^)]*$/.test(trimmedLine);
+        
+        if (hasFunctionCall) {
+            // 函数调用格式的语法高亮
+            const lastOpenParen = currentLine.lastIndexOf('(');
+            const lastCloseParen = currentLine.lastIndexOf(')');
+            const inFunctionParams = lastOpenParen !== -1 && (lastCloseParen === -1 || lastOpenParen > lastCloseParen);
+            
+            // 括号
+            if (ch === '(') return '(';
+            if (ch === ')') return ')';
+            
+            // 逗号
+            if (ch === ',') return ',';
+            
+            // 等号
+            if (ch === '=') return ch;
+            
+            // 空格
+            if (ch === ' ') return ch;
+            
+            if (inFunctionParams) {
+                // 在括号内
+                const inParams = currentLine.substring(lastOpenParen + 1);
+                const lastEqual = inParams.lastIndexOf('=');
+                const lastComma = inParams.lastIndexOf(',');
+                
+                // 判断当前位置
+                const afterLastDelimiter = Math.max(lastEqual, lastComma, 0);
+                const afterDelimiter = inParams.substring(afterLastDelimiter + 1);
+                
+                if (lastEqual > lastComma) {
+                    // 在等号之后，逗号之前 -> 参数值
+                    if (!/[,\s]/.test(afterDelimiter)) {
+                        if (/[\d\-]/.test(ch)) {
+                            return '<span class="xml-number">' + ch + '</span>';
+                        }
+                        if (/[a-zA-Z0-9_]/.test(ch)) {
+                            return '<span class="xml-attr-value">' + ch + '</span>';
+                        }
+                    }
+                } else {
+                    // 在逗号之后或开始，等号之前 -> 参数名
+                    if (!/=/.test(afterDelimiter)) {
+                        if (/[a-z_]/.test(ch)) {
+                            return '<span class="xml-attr-name">' + ch + '</span>';
+                        }
+                    }
+                }
+            }
+            
+            return ch;
+        } else {
+            // XML 格式的语法高亮
+            const lastOpenBracket = currentLine.lastIndexOf('<');
+            const lastCloseBracket = currentLine.lastIndexOf('>');
+            const inTag = lastOpenBracket > lastCloseBracket && lastOpenBracket !== -1;
+
+            if (ch === '<') return '<span class="xml-tag-bracket">&lt;</span>';
+            if (ch === '>') return '<span class="xml-tag-bracket">&gt;</span>';
+            if (!inTag) return ch;
+
+            const inTagContent = currentLine.substring(lastOpenBracket + 1);
+            if (ch === '=' || ch === ' ') return ch;
+
+            const lastSpaceInTag = inTagContent.lastIndexOf(' ');
+            const lastEqualInTag = inTagContent.lastIndexOf('=');
+
+            if (lastSpaceInTag === -1) {
+                if (/[a-zA-Z0-9_]/.test(ch)) return '<span class="xml-tag-name">' + ch + '</span>';
+            } else if (lastEqualInTag > lastSpaceInTag) {
+                const afterEqual = inTagContent.substring(lastEqualInTag + 1);
+                if (!/\s/.test(afterEqual)) {
+                    if (/[\d\-]/.test(ch)) return '<span class="xml-number">' + ch + '</span>';
+                    if (/[a-zA-Z0-9_]/.test(ch)) return '<span class="xml-attr-value">' + ch + '</span>';
+                }
+            } else if (lastSpaceInTag > lastEqualInTag) {
+                const afterSpace = inTagContent.substring(lastSpaceInTag + 1);
+                if (!/=/.test(afterSpace)) {
+                    if (/[a-zA-Z_]/.test(ch)) return '<span class="xml-attr-name">' + ch + '</span>';
+                }
+            }
+            return ch;
+        }
     }
 
     function createStage(config, measureEl) {
