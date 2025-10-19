@@ -14,10 +14,19 @@
     <section class="hero">
         <!-- 视频背景 -->
         <div class="hero-video-container">
-            <video id="hero-video-1" class="hero-video active" autoplay muted playsinline>
+            <!-- 压缩版视频（快速加载） -->
+            <video id="hero-video-1-low" class="hero-video active" autoplay muted playsinline>
+                <source src="FancyDemo/compressed/2025-10-19 22-33-26.mp4" type="video/mp4">
+            </video>
+            <video id="hero-video-2-low" class="hero-video" muted playsinline>
+                <source src="FancyDemo/compressed/2025-10-19 22-33-52.mp4" type="video/mp4">
+            </video>
+            
+            <!-- 高清版视频（后台加载） -->
+            <video id="hero-video-1-hd" class="hero-video" muted playsinline preload="auto">
                 <source src="FancyDemo/2025-10-19 22-33-26.mp4" type="video/mp4">
             </video>
-            <video id="hero-video-2" class="hero-video" muted playsinline>
+            <video id="hero-video-2-hd" class="hero-video" muted playsinline preload="auto">
                 <source src="FancyDemo/2025-10-19 22-33-52.mp4" type="video/mp4">
             </video>
         </div>
@@ -170,29 +179,84 @@
             initTypewriter('typewriter-container', typewriterStages);
         });
 
-        // Hero 视频循环播放控制
+        // Hero 视频渐进式加载和循环播放控制
         document.addEventListener('DOMContentLoaded', function() {
-            const video1 = document.getElementById('hero-video-1');
-            const video2 = document.getElementById('hero-video-2');
+            const video1Low = document.getElementById('hero-video-1-low');
+            const video2Low = document.getElementById('hero-video-2-low');
+            const video1HD = document.getElementById('hero-video-1-hd');
+            const video2HD = document.getElementById('hero-video-2-hd');
+            
+            let useHD = false;  // 是否使用高清版本
+            let currentVideo = 1;  // 当前播放的视频（1或2）
+            let hd1Ready = false;
+            let hd2Ready = false;
 
-            // 视频1播放结束时切换到视频2
-            video1.addEventListener('ended', function() {
-                video1.classList.remove('active');
-                video2.classList.add('active');
-                video2.currentTime = 0;
-                video2.play();
+            // 检测高清视频是否加载完成
+            video1HD.addEventListener('canplaythrough', function() {
+                hd1Ready = true;
+                console.log('HD视频1加载完成');
+                checkHDReady();
             });
 
-            // 视频2播放结束时切换回视频1
-            video2.addEventListener('ended', function() {
-                video2.classList.remove('active');
-                video1.classList.add('active');
-                video1.currentTime = 0;
-                video1.play();
+            video2HD.addEventListener('canplaythrough', function() {
+                hd2Ready = true;
+                console.log('HD视频2加载完成');
+                checkHDReady();
             });
 
-            // 确保视频1开始播放
-            video1.play().catch(err => console.log('视频自动播放被阻止:', err));
+            // 当两个高清视频都准备好时，切换到高清版本
+            function checkHDReady() {
+                if (hd1Ready && hd2Ready && !useHD) {
+                    console.log('切换到高清版本');
+                    useHD = true;
+                    switchToHD();
+                }
+            }
+
+            // 平滑切换到高清版本
+            function switchToHD() {
+                if (currentVideo === 1) {
+                    video1HD.currentTime = video1Low.currentTime;
+                    video1Low.classList.remove('active');
+                    video1HD.classList.add('active');
+                    video1HD.play();
+                } else {
+                    video2HD.currentTime = video2Low.currentTime;
+                    video2Low.classList.remove('active');
+                    video2HD.classList.add('active');
+                    video2HD.play();
+                }
+            }
+
+            // 视频循环逻辑
+            function setupVideoLoop(v1, v2, isHD) {
+                v1.addEventListener('ended', function() {
+                    if ((isHD && useHD) || (!isHD && !useHD)) {
+                        v1.classList.remove('active');
+                        v2.classList.add('active');
+                        v2.currentTime = 0;
+                        v2.play();
+                        currentVideo = 2;
+                    }
+                });
+
+                v2.addEventListener('ended', function() {
+                    if ((isHD && useHD) || (!isHD && !useHD)) {
+                        v2.classList.remove('active');
+                        v1.classList.add('active');
+                        v1.currentTime = 0;
+                        v1.play();
+                        currentVideo = 1;
+                    }
+                });
+            }
+
+            // 设置低清和高清视频的循环
+            setupVideoLoop(video1Low, video2Low, false);
+            setupVideoLoop(video1HD, video2HD, true);
+
+            // 开始播放压缩版视频
+            video1Low.play().catch(err => console.log('视频自动播放被阻止:', err));
         });
     </script>
 </body>

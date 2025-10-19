@@ -47,7 +47,7 @@ body {
 .hero-logo {
   width: 40%;
   max-width: 500px;
-  margin: 0 auto 10px auto;  /* 减少底部间距从 30px 到 10px */
+  margin: 0 auto 30px auto;
   z-index: 10;
 }
 
@@ -93,7 +93,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 35% !important;  /* 增加到 35% 并使用 !important 确保生效 */
+  margin-top: 25%;
 }
 
 .fancy-headline {
@@ -572,6 +572,8 @@ img[data-src] {
     align-items: flex-start;
     flex-wrap: wrap;
     margin: 40px 0;
+    overflow-x: auto;
+    overflow-y: visible;
 }
 .typewriter-row {
     display: flex;
