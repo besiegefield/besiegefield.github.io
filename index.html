@@ -142,6 +142,265 @@
 
 
         <section class="content-block">
+            <h2 class="block-title">Performance Leaderboard</h2>
+            <div class="block-content">
+                <!-- Task Switch Buttons -->
+                <div class="task-buttons">
+                    <button class="task-btn active" onclick="switchTask('catapult')">Catapult Task</button>
+                    <button class="task-btn" onclick="switchTask('car')">Car Task</button>
+                </div>
+
+                <!-- Catapult Task Table -->
+                <div class="leaderboard-container" id="catapult-table">
+                    <table class="leaderboard-table">
+                        <thead>
+                            <tr>
+                                <th class="model-col">Models</th>
+                                <th colspan="3" class="method-header">Single-agent</th>
+                                <th colspan="3" class="method-header">Iterative Editing</th>
+                                <th colspan="3" class="method-header">Hierarchical Design</th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th class="metric-col sortable" onclick="sortTable('catapult', 0, 'mean')" data-method="0" data-metric="mean">Mean</th>
+                                <th class="metric-col sortable" onclick="sortTable('catapult', 0, 'max')" data-method="0" data-metric="max">Max</th>
+                                <th class="metric-col sortable" onclick="sortTable('catapult', 0, 'std')" data-method="0" data-metric="std">Std</th>
+                                <th class="metric-col sortable" onclick="sortTable('catapult', 1, 'mean')" data-method="1" data-metric="mean">Mean</th>
+                                <th class="metric-col sortable" onclick="sortTable('catapult', 1, 'max')" data-method="1" data-metric="max">Max</th>
+                                <th class="metric-col sortable" onclick="sortTable('catapult', 1, 'std')" data-method="1" data-metric="std">Std</th>
+                                <th class="metric-col sortable" onclick="sortTable('catapult', 2, 'mean')" data-method="2" data-metric="mean">Mean</th>
+                                <th class="metric-col sortable" onclick="sortTable('catapult', 2, 'max')" data-method="2" data-metric="max">Max</th>
+                                <th class="metric-col sortable" onclick="sortTable('catapult', 2, 'std')" data-method="2" data-metric="std">Std</th>
+                            </tr>
+                        </thead>
+                        <tbody id="catapult-tbody">
+                            <tr data-model="Gemini 2.5 Pro">
+                                <td class="model-name">Gemini 2.5 Pro</td>
+                                <td data-value="2.30">2.30</td>
+                                <td data-value="9.00">9.00</td>
+                                <td data-value="3.86">3.86</td>
+                                <td data-value="4.67">4.67</td>
+                                <td data-value="21.95">21.95</td>
+                                <td data-value="8.68">8.68</td>
+                                <td data-value="9.83">9.83</td>
+                                <td data-value="18.19">18.19</td>
+                                <td data-value="8.35">8.35</td>
+                            </tr>
+                            <tr data-model="OpenAI o3">
+                                <td class="model-name">OpenAI o3</td>
+                                <td data-value="2.87">2.87</td>
+                                <td data-value="5.22">5.22</td>
+                                <td data-value="1.96">1.96</td>
+                                <td data-value="9.14">9.14</td>
+                                <td data-value="14.01">14.01</td>
+                                <td data-value="3.71">3.71</td>
+                                <td data-value="2.00">2.00</td>
+                                <td data-value="11.11">11.11</td>
+                                <td data-value="3.98">3.98</td>
+                            </tr>
+                            <tr data-model="Qwen3-Coder-480B-A35B">
+                                <td class="model-name">Qwen3-Coder-480B-A35B</td>
+                                <td data-value="1.75">1.75</td>
+                                <td data-value="9.24">9.24</td>
+                                <td data-value="3.17">3.17</td>
+                                <td data-value="5.10">5.10</td>
+                                <td data-value="12.02">12.02</td>
+                                <td data-value="5.54">5.54</td>
+                                <td data-value="3.90">3.90</td>
+                                <td data-value="6.52">6.52</td>
+                                <td data-value="2.54">2.54</td>
+                            </tr>
+                            <tr data-model="Doubao Seed 1.6-250615">
+                                <td class="model-name">Doubao Seed 1.6-250615</td>
+                                <td data-value="3.18">3.18</td>
+                                <td data-value="8.20">8.20</td>
+                                <td data-value="2.99">2.99</td>
+                                <td data-value="4.82">4.82</td>
+                                <td data-value="9.10">9.10</td>
+                                <td data-value="3.41">3.41</td>
+                                <td data-value="1.73">1.73</td>
+                                <td data-value="4.76">4.76</td>
+                                <td data-value="2.39">2.39</td>
+                            </tr>
+                            <tr data-model="Claude Opus 4-20250514">
+                                <td class="model-name">Claude Opus 4-20250514</td>
+                                <td data-value="1.19">1.19</td>
+                                <td data-value="4.82">4.82</td>
+                                <td data-value="2.21">2.21</td>
+                                <td data-value="1.18">1.18</td>
+                                <td data-value="4.91">4.91</td>
+                                <td data-value="2.18">2.18</td>
+                                <td data-value="2.27">2.27</td>
+                                <td data-value="9.32">9.32</td>
+                                <td data-value="4.22">4.22</td>
+                            </tr>
+                            <tr data-model="DeepSeek-V3">
+                                <td class="model-name">DeepSeek-V3</td>
+                                <td data-value="3.50">3.50</td>
+                                <td data-value="4.86">4.86</td>
+                                <td data-value="2.17">2.17</td>
+                                <td data-value="3.07">3.07</td>
+                                <td data-value="5.24">5.24</td>
+                                <td data-value="2.55">2.55</td>
+                                <td data-value="2.41">2.41</td>
+                                <td data-value="4.93">4.93</td>
+                                <td data-value="2.58">2.58</td>
+                            </tr>
+                            <tr data-model="Kimi K2-0711-preview">
+                                <td class="model-name">Kimi K2-0711-preview</td>
+                                <td data-value="2.57">2.57</td>
+                                <td data-value="9.05">9.05</td>
+                                <td data-value="3.72">3.72</td>
+                                <td data-value="2.82">2.82</td>
+                                <td data-value="11.39">11.39</td>
+                                <td data-value="5.23">5.23</td>
+                                <td data-value="5.39">5.39</td>
+                                <td data-value="12.02">12.02</td>
+                                <td data-value="5.16">5.16</td>
+                            </tr>
+                            <tr data-model="Llama 4 Scout 17B 16E">
+                                <td class="model-name">Llama 4 Scout 17B 16E</td>
+                                <td data-value="3.18">3.18</td>
+                                <td data-value="5.64">5.64</td>
+                                <td data-value="1.95">1.95</td>
+                                <td data-value="1.28">1.28</td>
+                                <td data-value="5.94">5.94</td>
+                                <td data-value="2.41">2.41</td>
+                                <td data-value="3.59">3.59</td>
+                                <td data-value="11.83">11.83</td>
+                                <td data-value="4.15">4.15</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Car Task Table -->
+                <div class="leaderboard-container" id="car-table" style="display: none;">
+                    <table class="leaderboard-table">
+                        <thead>
+                            <tr>
+                                <th class="model-col">Models</th>
+                                <th colspan="3" class="method-header">Single-agent</th>
+                                <th colspan="3" class="method-header">Iterative Editing</th>
+                                <th colspan="3" class="method-header">Hierarchical Design</th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th class="metric-col sortable" onclick="sortTable('car', 0, 'mean')" data-method="0" data-metric="mean">Mean</th>
+                                <th class="metric-col sortable" onclick="sortTable('car', 0, 'max')" data-method="0" data-metric="max">Max</th>
+                                <th class="metric-col sortable" onclick="sortTable('car', 0, 'std')" data-method="0" data-metric="std">Std</th>
+                                <th class="metric-col sortable" onclick="sortTable('car', 1, 'mean')" data-method="1" data-metric="mean">Mean</th>
+                                <th class="metric-col sortable" onclick="sortTable('car', 1, 'max')" data-method="1" data-metric="max">Max</th>
+                                <th class="metric-col sortable" onclick="sortTable('car', 1, 'std')" data-method="1" data-metric="std">Std</th>
+                                <th class="metric-col sortable" onclick="sortTable('car', 2, 'mean')" data-method="2" data-metric="mean">Mean</th>
+                                <th class="metric-col sortable" onclick="sortTable('car', 2, 'max')" data-method="2" data-metric="max">Max</th>
+                                <th class="metric-col sortable" onclick="sortTable('car', 2, 'std')" data-method="2" data-metric="std">Std</th>
+                            </tr>
+                        </thead>
+                        <tbody id="car-tbody">
+                            <tr data-model="Gemini 2.5 Pro">
+                                <td class="model-name">Gemini 2.5 Pro</td>
+                                <td data-value="33.96">33.96</td>
+                                <td data-value="40.85">40.85</td>
+                                <td data-value="6.73">6.73</td>
+                                <td data-value="34.34">34.34</td>
+                                <td data-value="41.66">41.66</td>
+                                <td data-value="13.96">13.96</td>
+                                <td data-value="29.96">29.96</td>
+                                <td data-value="41.52">41.52</td>
+                                <td data-value="7.78">7.78</td>
+                            </tr>
+                            <tr data-model="OpenAI o3">
+                                <td class="model-name">OpenAI o3</td>
+                                <td data-value="15.28">15.28</td>
+                                <td data-value="32.08">32.08</td>
+                                <td data-value="8.97">8.97</td>
+                                <td data-value="14.34">14.34</td>
+                                <td data-value="35.08">35.08</td>
+                                <td data-value="11.79">11.79</td>
+                                <td data-value="28.39">28.39</td>
+                                <td data-value="36.18">36.18</td>
+                                <td data-value="11.01">11.01</td>
+                            </tr>
+                            <tr data-model="Qwen3-Coder-480B-A35B">
+                                <td class="model-name">Qwen3-Coder-480B-A35B</td>
+                                <td data-value="8.87">8.87</td>
+                                <td data-value="11.50">11.50</td>
+                                <td data-value="4.46">4.46</td>
+                                <td data-value="15.24">15.24</td>
+                                <td data-value="28.95">28.95</td>
+                                <td data-value="13.12">13.12</td>
+                                <td data-value="12.59">12.59</td>
+                                <td data-value="34.05">34.05</td>
+                                <td data-value="10.78">10.78</td>
+                            </tr>
+                            <tr data-model="Doubao Seed 1.6-250615">
+                                <td class="model-name">Doubao Seed 1.6-250615</td>
+                                <td data-value="3.51">3.51</td>
+                                <td data-value="9.40">9.40</td>
+                                <td data-value="4.85">4.85</td>
+                                <td data-value="8.11">8.11</td>
+                                <td data-value="10.04">10.04</td>
+                                <td data-value="3.58">3.58</td>
+                                <td data-value="18.75">18.75</td>
+                                <td data-value="26.02">26.02</td>
+                                <td data-value="4.38">4.38</td>
+                            </tr>
+                            <tr data-model="Claude Opus 4-20250514">
+                                <td class="model-name">Claude Opus 4-20250514</td>
+                                <td data-value="9.83">9.83</td>
+                                <td data-value="12.98">12.98</td>
+                                <td data-value="1.28">1.28</td>
+                                <td data-value="8.07">8.07</td>
+                                <td data-value="28.04">28.04</td>
+                                <td data-value="12.48">12.48</td>
+                                <td data-value="14.56">14.56</td>
+                                <td data-value="38.67">38.67</td>
+                                <td data-value="20.69">20.69</td>
+                            </tr>
+                            <tr data-model="DeepSeek-V3">
+                                <td class="model-name">DeepSeek-V3</td>
+                                <td data-value="9.06">9.06</td>
+                                <td data-value="10.53">10.53</td>
+                                <td data-value="3.68">3.68</td>
+                                <td data-value="8.23">8.23</td>
+                                <td data-value="18.84">18.84</td>
+                                <td data-value="7.12">7.12</td>
+                                <td data-value="17.92">17.92</td>
+                                <td data-value="31.94">31.94</td>
+                                <td data-value="12.85">12.85</td>
+                            </tr>
+                            <tr data-model="Kimi K2-0711-preview">
+                                <td class="model-name">Kimi K2-0711-preview</td>
+                                <td data-value="1.75">1.75</td>
+                                <td data-value="8.09">8.09</td>
+                                <td data-value="2.80">2.80</td>
+                                <td data-value="14.36">14.36</td>
+                                <td data-value="28.34">28.34</td>
+                                <td data-value="9.47">9.47</td>
+                                <td data-value="1.94">1.94</td>
+                                <td data-value="14.99">14.99</td>
+                                <td data-value="5.48">5.48</td>
+                            </tr>
+                            <tr data-model="Llama 4 Scout 17B 16E">
+                                <td class="model-name">Llama 4 Scout 17B 16E</td>
+                                <td data-value="0.02">0.02</td>
+                                <td data-value="0.03">0.03</td>
+                                <td data-value="0.01">0.01</td>
+                                <td data-value="3.04">3.04</td>
+                                <td data-value="12.76">12.76</td>
+                                <td data-value="5.23">5.23</td>
+                                <td data-value="1.55">1.55</td>
+                                <td data-value="2.00">2.00</td>
+                                <td data-value="0.32">0.32</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-block">
             <h2 class="block-title">LLM-Agent-Generated Machines</h2>
             <div class="block-content">
                 <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 400'%3E%3Crect fill='%23f0f0f0' width='800' height='400'/%3E%3C/svg%3E" data-src="figures/machine_comp.png" alt="Machine Comparison" style="display:block; width:100%; height:auto; max-width:100%;">
@@ -159,6 +418,65 @@
                 <p style="text-align: center; margin-top: 15px; font-size: 0.95rem; color: #666;">
                     Reinforcement learning with verifiable rewards (RLVR) improves Qwen-2.5-14B model in compositional machine design.
                 </p>
+                
+                <!-- RL Results Table -->
+                <div class="rl-table-container" style="margin-top: 30px;">
+                    <table class="rl-results-table">
+                        <thead>
+                            <tr>
+                                <th rowspan="2" class="model-col">Models</th>
+                                <th colspan="3" class="task-header">Catapult</th>
+                                <th colspan="3" class="task-header">Car</th>
+                            </tr>
+                            <tr>
+                                <th class="metric-col">Validity Ratio</th>
+                                <th class="metric-col">Mean Score</th>
+                                <th class="metric-col">Max Score</th>
+                                <th class="metric-col">Validity Ratio</th>
+                                <th class="metric-col">Mean Score</th>
+                                <th class="metric-col">Max Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="model-name">Qwen2.5-14B-Instruct</td>
+                                <td>11/50</td>
+                                <td>0.06</td>
+                                <td>2.41</td>
+                                <td>46/50</td>
+                                <td>4.97</td>
+                                <td>19.10</td>
+                            </tr>
+                            <tr>
+                                <td class="model-name">Qwen2.5-14B-Instruct + Cold-Start</td>
+                                <td>9/50</td>
+                                <td>0.11</td>
+                                <td>5.54</td>
+                                <td>40/50</td>
+                                <td>4.67</td>
+                                <td>20.23</td>
+                            </tr>
+                            <tr>
+                                <td class="model-name">Qwen2.5-14B-Instruct + RL</td>
+                                <td class="highlight">12/50</td>
+                                <td>0.13</td>
+                                <td>5.92</td>
+                                <td>41/50</td>
+                                <td>3.72</td>
+                                <td>24.08</td>
+                            </tr>
+                            <tr>
+                                <td class="model-name">Qwen2.5-14B-Instruct + Cold-Start + RL</td>
+                                <td>11/50</td>
+                                <td class="highlight">0.14</td>
+                                <td class="highlight">7.14</td>
+                                <td class="highlight">42/50</td>
+                                <td class="highlight">5.05</td>
+                                <td class="highlight">45.72</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
@@ -267,6 +585,113 @@
             // 开始播放压缩版视频
             video1Low.play().catch(err => console.log('视频自动播放被阻止:', err));
         });
+
+        // Leaderboard functions
+        const originalOrder = {
+            catapult: null,
+            car: null
+        };
+        
+        const sortState = {
+            catapult: { currentColumn: null, currentSort: null },
+            car: { currentColumn: null, currentSort: null }
+        };
+
+        // Save original order on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            originalOrder.catapult = Array.from(document.getElementById('catapult-tbody').querySelectorAll('tr'));
+            originalOrder.car = Array.from(document.getElementById('car-tbody').querySelectorAll('tr'));
+        });
+
+        function switchTask(task) {
+            const catapultTable = document.getElementById('catapult-table');
+            const carTable = document.getElementById('car-table');
+            const buttons = document.querySelectorAll('.task-btn');
+            
+            if (task === 'catapult') {
+                catapultTable.style.display = 'block';
+                carTable.style.display = 'none';
+                buttons[0].classList.add('active');
+                buttons[1].classList.remove('active');
+            } else {
+                catapultTable.style.display = 'none';
+                carTable.style.display = 'block';
+                buttons[0].classList.remove('active');
+                buttons[1].classList.add('active');
+            }
+        }
+
+        function sortTable(task, methodIndex, metric) {
+            const tbodyId = task + '-tbody';
+            const tbody = document.getElementById(tbodyId);
+            const metricOffset = metric === 'mean' ? 0 : (metric === 'max' ? 1 : 2);
+            const columnIndex = 1 + methodIndex * 3 + metricOffset;
+            const columnKey = `${methodIndex}-${metric}`;
+            
+            // Get the clicked header element
+            const table = tbody.closest('table');
+            const clickedHeader = table.querySelector(`th.metric-col[data-method="${methodIndex}"][data-metric="${metric}"]`);
+            
+            // If clicking a different column, reset previous column
+            if (sortState[task].currentColumn && sortState[task].currentColumn !== columnKey) {
+                const prevHeader = table.querySelector(`th.metric-col.sort-desc, th.metric-col.sort-asc`);
+                if (prevHeader) {
+                    prevHeader.classList.remove('sort-desc', 'sort-asc');
+                }
+                // Restore original order
+                tbody.innerHTML = '';
+                originalOrder[task].forEach(row => tbody.appendChild(row.cloneNode(true)));
+                sortState[task].currentColumn = null;
+                sortState[task].currentSort = null;
+            }
+            
+            let rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            // Determine next sort state
+            let nextSort;
+            if (sortState[task].currentColumn === columnKey) {
+                if (sortState[task].currentSort === 'desc') {
+                    nextSort = 'asc';
+                } else if (sortState[task].currentSort === 'asc') {
+                    nextSort = null;
+                } else {
+                    nextSort = 'desc';
+                }
+            } else {
+                nextSort = 'desc';
+            }
+            
+            // Remove all sort classes from headers
+            clickedHeader.classList.remove('sort-desc', 'sort-asc');
+            
+            if (nextSort === null) {
+                // Restore original order
+                tbody.innerHTML = '';
+                originalOrder[task].forEach(row => tbody.appendChild(row.cloneNode(true)));
+                sortState[task].currentColumn = null;
+                sortState[task].currentSort = null;
+            } else {
+                // Sort the rows
+                rows.sort((a, b) => {
+                    const aValue = parseFloat(a.children[columnIndex].getAttribute('data-value'));
+                    const bValue = parseFloat(b.children[columnIndex].getAttribute('data-value'));
+                    if (nextSort === 'desc') {
+                        return bValue - aValue;
+                    } else {
+                        return aValue - bValue;
+                    }
+                });
+                
+                // Update tbody
+                tbody.innerHTML = '';
+                rows.forEach(row => tbody.appendChild(row));
+                
+                // Update sort indicator
+                clickedHeader.classList.add(`sort-${nextSort}`);
+                sortState[task].currentColumn = columnKey;
+                sortState[task].currentSort = nextSort;
+            }
+        }
     </script>
 </body>
 </html>

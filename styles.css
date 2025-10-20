@@ -679,3 +679,286 @@ img[data-src] {
     pointer-events: none;
     top: -9999px;
 }
+
+/* Leaderboard Styles */
+.task-buttons {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    justify-content: center;
+}
+
+.task-btn {
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    border: 2px solid #667eea;
+    background: white;
+    color: #667eea;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.task-btn:hover {
+    background: #f0f4ff;
+}
+
+.task-btn.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: transparent;
+}
+
+.leaderboard-container {
+    overflow-x: auto;
+    margin: 20px 0;
+}
+
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.leaderboard-table thead {
+    background: white;
+}
+
+.leaderboard-table th {
+    padding: 12px 8px;
+    text-align: center;
+    font-weight: 600;
+    border: 1px solid #d0d0d0;
+}
+
+.leaderboard-table th.model-col {
+    min-width: 200px;
+    text-align: left;
+    padding-left: 20px;
+    background: white;
+}
+
+.leaderboard-table th.method-header {
+    font-size: 0.95rem;
+    background: #d6e4ff;
+    color: #333;
+}
+
+.leaderboard-table th.metric-col {
+    font-size: 0.85rem;
+    font-weight: 500;
+    min-width: 70px;
+    background: #e8e8e8;
+    color: #333;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+}
+
+.leaderboard-table th.metric-col.sortable:hover {
+    background: #d0d0d0;
+}
+
+.leaderboard-table th.metric-col.sort-desc::after {
+    content: ' ▼';
+    font-size: 0.8em;
+    color: #667eea;
+}
+
+.leaderboard-table th.metric-col.sort-asc::after {
+    content: ' ▲';
+    font-size: 0.8em;
+    color: #667eea;
+}
+
+.leaderboard-table tbody tr {
+    transition: background-color 0.2s;
+}
+
+.leaderboard-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.leaderboard-table td {
+    padding: 12px 8px;
+    text-align: center;
+    border: 1px solid #d0d0d0;
+    background: white;
+}
+
+.leaderboard-table td.model-name {
+    text-align: left;
+    font-weight: 600;
+    color: #333;
+    padding-left: 20px;
+    background: white;
+}
+
+/* RL Results Table Styles */
+.rl-table-container {
+    overflow-x: auto;
+    margin: 30px 0;
+}
+
+.rl-results-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 0 auto;
+    max-width: 900px;
+}
+
+.rl-results-table thead {
+    background: white;
+}
+
+.rl-results-table th {
+    padding: 14px 12px;
+    text-align: center;
+    font-weight: 600;
+    border: 1px solid #d0d0d0;
+}
+
+.rl-results-table th.model-col {
+    min-width: 280px;
+    text-align: left;
+    padding-left: 20px;
+    background: white;
+    vertical-align: middle;
+}
+
+.rl-results-table th.task-header {
+    font-size: 1rem;
+    background: #d6e4ff;
+    color: #333;
+    font-weight: 700;
+}
+
+.rl-results-table th.metric-col {
+    font-size: 0.9rem;
+    font-weight: 500;
+    background: #e8e8e8;
+    color: #333;
+    min-width: 110px;
+}
+
+.rl-results-table tbody tr {
+    transition: background-color 0.2s;
+}
+
+.rl-results-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.rl-results-table td {
+    padding: 14px 12px;
+    text-align: center;
+    border: 1px solid #d0d0d0;
+    background: white;
+}
+
+.rl-results-table td.model-name {
+    text-align: left;
+    font-weight: 500;
+    color: #333;
+    padding-left: 20px;
+    background: white;
+}
+
+.rl-results-table td.highlight {
+    font-weight: 700;
+    color: #667eea;
+}
+
+/* Responsive design for leaderboard */
+@media (max-width: 1200px) {
+    .leaderboard-table {
+        font-size: 0.85rem;
+    }
+    
+    .leaderboard-table th,
+    .leaderboard-table td {
+        padding: 10px 6px;
+    }
+    
+    .leaderboard-table th.model-col,
+    .leaderboard-table td.model-name {
+        min-width: 150px;
+        padding-left: 15px;
+    }
+    
+    .rl-results-table {
+        font-size: 0.85rem;
+    }
+    
+    .rl-results-table th,
+    .rl-results-table td {
+        padding: 10px 8px;
+    }
+    
+    .rl-results-table th.model-col,
+    .rl-results-table td.model-name {
+        min-width: 200px;
+        padding-left: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .task-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .task-btn {
+        width: 100%;
+    }
+    
+    .leaderboard-table {
+        font-size: 0.75rem;
+    }
+    
+    .leaderboard-table th,
+    .leaderboard-table td {
+        padding: 8px 4px;
+    }
+    
+    .leaderboard-table th.model-col,
+    .leaderboard-table td.model-name {
+        min-width: 120px;
+        padding-left: 10px;
+    }
+    
+    .leaderboard-table th.metric-col {
+        min-width: 50px;
+    }
+    
+    .rl-results-table {
+        font-size: 0.8rem;
+    }
+    
+    .rl-results-table th,
+    .rl-results-table td {
+        padding: 8px 6px;
+    }
+    
+    .rl-results-table th.model-col,
+    .rl-results-table td.model-name {
+        min-width: 180px;
+        padding-left: 10px;
+        font-size: 0.75rem;
+    }
+    
+    .rl-results-table th.metric-col {
+        min-width: 80px;
+        font-size: 0.75rem;
+    }
+}
