@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Besiege Machine Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        small {
+            color: #666;
+            display: block;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .output-section {
+            margin-top: 30px;
+        }
+
+        .output-box {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        .output-box pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 0;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px solid #f5c6cb;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px solid #c3e6cb;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 16px;
+            font-weight: 500;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab:hover {
+            color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .info-box h4 {
+            margin-bottom: 10px;
+            color: #1976D2;
+        }
+
+        .info-box ul {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎮 Besiege Machine Generator</h1>
+            <p>Generate your Besiege machine designs with AI</p>
+            <span class="badge">✨ Standalone Version - No Installation Required</span>
+        </header>
+
+        <div class="content">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('ai')">AI Generation</button>
+                <button class="tab" onclick="switchTab('manual')">Manual Conversion</button>
+            </div>
+
+            <!-- AI Generation Tab -->
+            <div id="ai-tab" class="tab-content active">
+                <div class="section">
+                    <div class="info-box">
+                        <h4>💡 How to Use</h4>
+                        <ul>
+                            <li>Enter your API Key (default: DeepSeek)</li>
+                            <li>Specify the model name</li>
+                            <li>Configure API Base URL if needed</li>
+                            <li>Describe the machine you want to create</li>
+                            <li>Click "Generate Machine"</li>
+                            <li>Download the generated .bsg file</li>
+                        </ul>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="apiKey">API Key: *</label>
+                        <input type="password" id="apiKey" placeholder="Enter your API key">
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="apiBase">API Base (Optional):</label>
+                            <input type="text" id="apiBase" placeholder="e.g., https://api.openai.com">
+                            <small>💡 Enter the API base URL for your model provider</small>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="customModel">Model Name: *</label>
+                            <input type="text" id="customModel" placeholder="e.g., gpt-4, deepseek-chat">
+                            <small>💡 Enter any OpenAI-compatible model name</small>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="userInput">Describe Your Machine: *</label>
+                        <textarea id="userInput" rows="5" placeholder="Describe the machine you want to create..."></textarea>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-primary" onclick="generateMachine()">🚀 Generate Machine</button>
+                    </div>
+
+                    <div class="loading" id="loading">
+                        <div class="spinner"></div>
+                        <p style="margin-top: 15px;">Generating, please wait...</p>
+                    </div>
+
+                    <div id="result"></div>
+
+                    <div class="output-section" id="gptOutput" style="display: none;">
+                        <div class="section-title">AI Response (JSON):</div>
+                        <div class="output-box">
+                            <pre id="gptResponseText"></pre>
+                        </div>
+                    </div>
+
+                    <div class="output-section" id="xmlOutput" style="display: none;">
+                        <div class="section-title">XML Output:</div>
+                        <div class="output-box">
+                            <pre id="xmlOutputText"></pre>
+                        </div>
+                        <div class="button-group">
+                            <button class="btn-secondary" onclick="copyToClipboard('xmlOutputText')">📋 Copy XML</button>
+                            <button class="btn-success" onclick="downloadXML()">💾 Download .bsg File</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Manual Conversion Tab -->
+            <div id="manual-tab" class="tab-content">
+                <div class="section">
+                    <div class="info-box">
+                        <h4>💡 How to Use</h4>
+                        <ul>
+                            <li>Paste your JSON machine data</li>
+                            <li>Click "Convert to XML"</li>
+                            <li>Download the generated .bsg file</li>
+                        </ul>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="jsonInput">JSON Input:</label>
+                        <textarea id="jsonInput" rows="10" placeholder='Paste your JSON data here...'></textarea>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-primary" onclick="convertJSON()">🔄 Convert to XML</button>
+                    </div>
+
+                    <div class="loading" id="loadingManual">
+                        <div class="spinner"></div>
+                        <p style="margin-top: 15px;">Converting...</p>
+                    </div>
+
+                    <div id="resultManual"></div>
+
+                    <div class="output-section" id="xmlOutputManual" style="display: none;">
+                        <div class="section-title">XML Output:</div>
+                        <div class="output-box">
+                            <pre id="xmlOutputTextManual"></pre>
+                        </div>
+                        <div class="button-group">
+                            <button class="btn-secondary" onclick="copyToClipboard('xmlOutputTextManual')">📋 Copy XML</button>
+                            <button class="btn-success" onclick="downloadXMLManual()">💾 Download .bsg File</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load JavaScript modules in correct order -->
+    <!-- 1. Math libraries -->
+    <script src="quaternion.js"></script>
+    <script src="vector_math.js"></script>
+    
+    <!-- 2. Geometry calculations -->
+    <script src="geometry.js"></script>
+    
+    <!-- 3. Conversion logic -->
+    <script src="conversion.js"></script>
+    <script src="xml_generator.js"></script>
+    
+    <!-- 4. Main application logic -->
+    <script src="app_logic.js"></script>
+</body>
+</html>
+
