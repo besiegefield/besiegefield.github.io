@@ -102,6 +102,23 @@
         </section>
 
         <section class="content-block">
+            <h2 class="block-title">Compositional Machine Design</h2>
+            <div class="block-content">
+                <div class="video-container">
+                    <!-- 压缩版视频（快速加载） -->
+                    <video id="compositional-video-low" class="compositional-video active" controls muted loop playsinline>
+                        <source src="FancyDemo/compressed/Compositional_Machine_Task_Explain_v4_compressed.mp4" type="video/mp4">
+                        您的浏览器不支持视频播放。
+                    </video>
+                    <!-- 高清版视频（后台加载） -->
+                    <video id="compositional-video-hd" class="compositional-video" controls muted loop playsinline preload="auto">
+                        <source src="FancyDemo/Compositional_Machine_Task_Explain_v4.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-block">
             <h2 class="block-title">Agentic Machine Construction</h2>
             <div class="block-content">
                 <div id="typewriter-container"></div>
@@ -504,6 +521,40 @@
         // 初始化 Typewriter
         document.addEventListener('DOMContentLoaded', function() {
             initTypewriter('typewriter-container', typewriterStages);
+            
+            // 初始化 Compositional Machine Design 视频渐进式加载
+            const compositionalVideoLow = document.getElementById('compositional-video-low');
+            const compositionalVideoHD = document.getElementById('compositional-video-hd');
+            let compositionalHDReady = false;
+            let compositionalUseHD = false;
+            
+            if (compositionalVideoLow && compositionalVideoHD) {
+                // 检测高清视频是否加载完成
+                compositionalVideoHD.addEventListener('canplaythrough', function() {
+                    compositionalHDReady = true;
+                    console.log('Compositional HD视频加载完成');
+                    if (!compositionalUseHD) {
+                        compositionalUseHD = true;
+                        switchToCompositionalHD();
+                    }
+                });
+                
+                // 平滑切换到高清版本
+                function switchToCompositionalHD() {
+                    console.log('切换到Compositional HD版本');
+                    compositionalVideoHD.currentTime = compositionalVideoLow.currentTime;
+                    compositionalVideoLow.classList.remove('active');
+                    compositionalVideoHD.classList.add('active');
+                    compositionalVideoHD.play().catch(err => {
+                        console.log('Compositional HD视频播放被阻止:', err);
+                    });
+                }
+                
+                // 开始播放压缩版视频
+                compositionalVideoLow.play().catch(err => {
+                    console.log('Compositional压缩版视频自动播放被阻止:', err);
+                });
+            }
         });
 
         // Hero 视频渐进式加载和循环播放控制
