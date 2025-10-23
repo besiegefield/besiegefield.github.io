@@ -304,8 +304,8 @@ body {
 
 /* Reasoning Image Styling */
 .reasoning-image-container {
-    width: 100%;
-    margin-top: 20px;
+    max-width: 900px;
+    margin: 20px auto 0 auto;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
