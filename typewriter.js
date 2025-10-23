@@ -3,7 +3,7 @@
     'use strict';
 
     const charInterval = 10;
-    const cacheVersion = '20251019';
+    const cacheVersion = '20251023v2';
 
     function measureCodeWidth(code, measureEl) {
         measureEl.textContent = '';
@@ -121,7 +121,7 @@
     }
 
     function createStage(config, measureEl) {
-        const { code, lineMap, defaultPic, imageWidth, stageHeight, _adjustedCodeWidth, _adjustedTotalWidth } = config;
+        const { code, lineMap, defaultPic, imageWidth, stageHeight, caption, _adjustedCodeWidth, _adjustedTotalWidth } = config;
         
         // 使用调整后的宽度，如果没有则使用原始计算
         const codeWidth = _adjustedCodeWidth !== undefined ? _adjustedCodeWidth : measureCodeWidth(code, measureEl);
@@ -220,7 +220,9 @@
         ctrl.querySelector('.replay-btn').onclick = replay;
 
         start();
-        return stage;
+        
+        // 返回包含stage和caption的对象
+        return { stage, caption };
     }
 
     // 导出初始化函数
@@ -284,8 +286,22 @@
                     _adjustedCodeWidth: adjustedCodeWidth,
                     _adjustedTotalWidth: maxRowWidth
                 };
-                const stage = createStage(uniformConfig, measureEl);
-                rowDiv.appendChild(stage);
+                const result = createStage(uniformConfig, measureEl);
+                
+                // 创建一个包装容器
+                const stageWrapper = document.createElement('div');
+                stageWrapper.className = 'typewriter-stage-wrapper';
+                stageWrapper.appendChild(result.stage);
+                
+                // 如果有caption，添加独立的caption元素
+                if (result.caption) {
+                    const captionDiv = document.createElement('div');
+                    captionDiv.className = 'typewriter-caption';
+                    captionDiv.textContent = result.caption;
+                    stageWrapper.appendChild(captionDiv);
+                }
+                
+                rowDiv.appendChild(stageWrapper);
             });
 
             container.appendChild(rowDiv);

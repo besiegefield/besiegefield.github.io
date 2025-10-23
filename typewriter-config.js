@@ -34,7 +34,8 @@ const typewriterStages = [
         },
         defaultPic: 'figures/agentic_building/build/0.png',
         imageWidth: 400,
-        stageHeight: 400
+        stageHeight: 400,
+        caption: 'The designer agent builds a catapult by composing parts together in a hierarchical structure.'
     },
     {
         row: 2,
@@ -69,7 +70,8 @@ add(target=log_4, to=starting_block, face=face_3)
         },
         defaultPic: 'figures/agentic_building/build/12.png',
         imageWidth: 400,
-        stageHeight: 400
+        stageHeight: 400,
+        caption: 'The refiner agent iteratively refines the design by adjusting blocks for better performance.'
     }
 ];
 

@@ -302,6 +302,29 @@ body {
     pointer-events: auto;
 }
 
+/* Reasoning Image Styling */
+.reasoning-image-container {
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: #fff;
+    position: relative;
+}
+
+.reasoning-image-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.reasoning-image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
 /* Gallery Styling */
 .gallery {
     display: grid;
@@ -593,6 +616,11 @@ img[data-src] {
     text-align: left;
     vertical-align: top;
 }
+.typewriter-stage-wrapper {
+    display: inline-block;
+    margin-bottom: 40px;
+    flex-shrink: 0;
+}
 .typewriter-stage {
     background: #282c34;
     border-radius: 8px;
@@ -600,7 +628,7 @@ img[data-src] {
     display: inline-flex;
     overflow: hidden;
     position: relative;
-    margin-bottom: 60px;
+    margin-bottom: 15px;
     flex-shrink: 0;
 }
 .typewriter-left {
@@ -664,6 +692,15 @@ img[data-src] {
 }
 .typewriter-ctrl button:hover {
     background: #5c6370;
+}
+.typewriter-caption {
+    text-align: center;
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.6;
+    padding: 10px 20px;
+    max-width: 950px;
+    margin: 0 auto;
 }
 /* XML 语法高亮 */
 .xml-tag-bracket { color: #808080; }
