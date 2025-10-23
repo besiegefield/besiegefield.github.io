@@ -136,7 +136,8 @@
             <h2 class="block-title">Agentic Machine Construction - Reasoning</h2>
             <div class="block-content">
                 <div class="reasoning-image-container">
-                    <img src="figures/gemini_cot_example_v3_compressed.png" data-src="figures/gemini_cot_example_v3.png" alt="Agentic Machine Construction Reasoning Process" class="reasoning-image">
+                    <img src="figures/gemini_cot_example_v3_compressed.png" data-src="figures/gemini_cot_example_v3.png" alt="Agentic Machine Construction Reasoning Process" class="reasoning-image" id="reasoning-image" style="cursor: pointer;">
+                    <div class="zoom-hint">🔍 Click to zoom</div>
                 </div>
                 <p style="text-align: center; margin-top: 15px; font-size: 0.95rem; color: #666;">
                     Example CoT of inspector agents (w/ Gemini 2.5 Pro). Blue text highlights the moderate capability of LLMs in spatial reasoning and imagined physical simulation.
@@ -536,6 +537,13 @@
         <p>BesiegeField © 2025</p>
     </footer>
 
+    <!-- Lightbox Modal -->
+    <div id="image-lightbox" class="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-content" id="lightbox-img">
+        <div class="lightbox-caption" id="lightbox-caption"></div>
+    </div>
+
     <script>
         // 初始化 Typewriter
         document.addEventListener('DOMContentLoaded', function() {
@@ -572,6 +580,47 @@
                 // 开始播放压缩版视频
                 compositionalVideoLow.play().catch(err => {
                     console.log('Compositional压缩版视频自动播放被阻止:', err);
+                });
+            }
+            
+            // 初始化图片 Lightbox
+            const reasoningImage = document.getElementById('reasoning-image');
+            const lightbox = document.getElementById('image-lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxCaption = document.getElementById('lightbox-caption');
+            const lightboxClose = document.querySelector('.lightbox-close');
+            
+            if (reasoningImage && lightbox) {
+                reasoningImage.addEventListener('click', function() {
+                    lightbox.style.display = 'block';
+                    // 使用高清版本如果已加载，否则使用当前src
+                    lightboxImg.src = this.dataset.src || this.src;
+                    lightboxCaption.textContent = this.alt;
+                    document.body.style.overflow = 'hidden'; // 防止背景滚动
+                });
+                
+                // 关闭按钮
+                if (lightboxClose) {
+                    lightboxClose.addEventListener('click', function() {
+                        lightbox.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                    });
+                }
+                
+                // 点击背景关闭
+                lightbox.addEventListener('click', function(e) {
+                    if (e.target === lightbox) {
+                        lightbox.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                    }
+                });
+                
+                // ESC键关闭
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && lightbox.style.display === 'block') {
+                        lightbox.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                    }
                 });
             }
         });
