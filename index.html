@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BesiegeField</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=20251023-5">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <script src="progressive-loader.js" defer></script>
@@ -590,36 +590,71 @@
             const lightboxCaption = document.getElementById('lightbox-caption');
             const lightboxClose = document.querySelector('.lightbox-close');
             
+            // 记录原始的body位置，用于恢复
+            let scrollPosition = 0;
+            
+            function openLightbox() {
+                // 记录当前滚动位置
+                scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+                
+                // 显示lightbox
+                lightbox.style.display = 'block';
+                
+                // 使用高清版本如果已加载，否则使用当前src
+                const imgSrc = reasoningImage.dataset.src || reasoningImage.src;
+                lightboxImg.src = imgSrc;
+                lightboxCaption.textContent = reasoningImage.alt;
+                
+                // 防止背景滚动（兼容iOS）
+                document.body.style.overflow = 'hidden';
+                document.body.style.position = 'fixed';
+                document.body.style.top = `-${scrollPosition}px`;
+                document.body.style.width = '100%';
+            }
+            
+            function closeLightbox() {
+                lightbox.style.display = 'none';
+                
+                // 恢复背景滚动
+                document.body.style.overflow = '';
+                document.body.style.position = '';
+                document.body.style.top = '';
+                document.body.style.width = '';
+                
+                // 恢复滚动位置
+                window.scrollTo(0, scrollPosition);
+            }
+            
             if (reasoningImage && lightbox) {
-                reasoningImage.addEventListener('click', function() {
-                    lightbox.style.display = 'block';
-                    // 使用高清版本如果已加载，否则使用当前src
-                    lightboxImg.src = this.dataset.src || this.src;
-                    lightboxCaption.textContent = this.alt;
-                    document.body.style.overflow = 'hidden'; // 防止背景滚动
-                });
+                // 点击图片打开
+                reasoningImage.addEventListener('click', openLightbox);
                 
                 // 关闭按钮
                 if (lightboxClose) {
-                    lightboxClose.addEventListener('click', function() {
-                        lightbox.style.display = 'none';
-                        document.body.style.overflow = 'auto';
+                    lightboxClose.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        closeLightbox();
+                    });
+                    
+                    // 添加触摸事件支持
+                    lightboxClose.addEventListener('touchend', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        closeLightbox();
                     });
                 }
                 
                 // 点击背景关闭
                 lightbox.addEventListener('click', function(e) {
                     if (e.target === lightbox) {
-                        lightbox.style.display = 'none';
-                        document.body.style.overflow = 'auto';
+                        closeLightbox();
                     }
                 });
                 
                 // ESC键关闭
                 document.addEventListener('keydown', function(e) {
                     if (e.key === 'Escape' && lightbox.style.display === 'block') {
-                        lightbox.style.display = 'none';
-                        document.body.style.overflow = 'auto';
+                        closeLightbox();
                     }
                 });
             }

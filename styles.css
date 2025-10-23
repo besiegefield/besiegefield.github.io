@@ -310,8 +310,11 @@ body {
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    background: #fff;
+    background: transparent !important;
+    background-color: transparent !important;
     position: relative;
+    /* 强制16:9宽高比 */
+    aspect-ratio: 16 / 9;
 }
 
 .reasoning-image-container:hover {
@@ -325,10 +328,10 @@ body {
 
 .reasoning-image {
     width: 100%;
-    height: auto;
+    height: 100%;
     display: block;
     object-fit: contain;
-    aspect-ratio: auto;
+    background: transparent !important;
 }
 
 .zoom-hint {
@@ -350,14 +353,22 @@ body {
     display: none;
     position: fixed;
     z-index: 9999;
-    padding: 50px 20px 20px 20px;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
     background-color: rgba(0, 0, 0, 0.95);
     animation: fadeIn 0.3s ease;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px 80px 20px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.lightbox[style*="display: block"] {
+    display: flex !important;
+    flex-direction: column;
 }
 
 @keyframes fadeIn {
@@ -366,12 +377,13 @@ body {
 }
 
 .lightbox-content {
-    margin: auto;
-    display: block;
     max-width: 95%;
     max-height: 85vh;
+    width: auto;
+    height: auto;
     object-fit: contain;
     animation: zoomIn 0.3s ease;
+    flex-shrink: 0;
 }
 
 @keyframes zoomIn {
@@ -389,35 +401,52 @@ body {
     transition: 0.3s;
     cursor: pointer;
     z-index: 10000;
+    line-height: 1;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .lightbox-close:hover,
-.lightbox-close:focus {
+.lightbox-close:focus,
+.lightbox-close:active {
     color: #bbb;
 }
 
 .lightbox-caption {
-    margin: auto;
-    display: block;
     width: 80%;
     max-width: 700px;
     text-align: center;
     color: #ccc;
     padding: 15px 0;
     font-size: 1rem;
+    flex-shrink: 0;
 }
 
 /* 响应式：移动端优化 */
 @media (max-width: 768px) {
+    .lightbox {
+        padding: 50px 10px 60px 10px;
+    }
+    
     .lightbox-content {
         max-width: 100%;
-        max-height: 80vh;
+        max-height: none;
+        width: 100%;
+        height: auto;
     }
     
     .lightbox-close {
         top: 10px;
         right: 15px;
-        font-size: 40px;
+        font-size: 45px;
+        padding: 5px;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
     .zoom-hint {
@@ -425,6 +454,13 @@ body {
         padding: 6px 12px;
         top: 10px;
         right: 10px;
+        opacity: 1;
+    }
+    
+    .lightbox-caption {
+        width: 90%;
+        font-size: 0.9rem;
+        padding: 10px;
     }
 }
 
